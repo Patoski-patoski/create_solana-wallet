@@ -3,6 +3,9 @@
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  background-color: #242424;
+  color: #fff;
+  border-radius: 10px;
 }
 
 .logo {
@@ -11,6 +14,7 @@
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
@@ -33,13 +37,6 @@
   }
 }
 
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
-}
 
 
 /* Connect wallet css */
@@ -56,9 +53,7 @@
 }
 
 .wallet-adapter-button {
-  font-size: 16px !important;
   padding: 12px 20px !important;
-  border-radius: 8px !important;
   transition: all 0.3s ease-in-out;
 }
 
@@ -66,7 +61,3 @@
   transform: scale(1.05);
 }
 
-.wallet-adapter-button-trigger:last-child {
-  margin-left: 80px; 
-  margin-top: 150px;
-}

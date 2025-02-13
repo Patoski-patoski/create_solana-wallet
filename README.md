@@ -1,2 +1,3 @@
 # create_solana-wallet
-Task ne to connect and create solana wallet
+
+- Task One to connect and create solana wallet
