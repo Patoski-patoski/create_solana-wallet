@@ -64,7 +64,7 @@ const WalletInfo: FC = () => {
         </Alert>
       ): (
         <Alert variant="warning">
-          No wallet connected. Please connect a wallet to continue
+          No wallet connected. Please connect a wallet
         </Alert>
       )}
     </div>

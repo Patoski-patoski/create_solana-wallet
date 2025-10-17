@@ -4,8 +4,8 @@ import React, { useState } from "react";
 import { Keypair } from "@solana/web3.js";
 
 interface WalletData {
-  publicKey: string;
-  secretKey: string;
+  walletAddress: string;
+  privateKey: string;
 }
 
 const CreateWallet: React.FC = () => {
@@ -13,17 +13,16 @@ const CreateWallet: React.FC = () => {
   const [showSecret, setShowSecret] = useState(false);
   const [copied, setCopied] = useState(false);
 
-
   const createWallet = () => {
     try {
-      const newKeyPair = Keypair.generate(); // Ggenerate new wallet
-      const publicKey = newKeyPair.publicKey.toBase58(); // Get public Address
-      const secretKey = Buffer.from(newKeyPair.secretKey).toString("hex");
-      setWallet({ publicKey, secretKey });
+      const newKeyPair = Keypair.generate(); // Generate new wallet
+      const walletAddress = newKeyPair.publicKey.toBase58();
+      const privateKey = Buffer.from(newKeyPair.secretKey).toString("hex");
 
-      sessionStorage.setItem("solanaWalletPublicKey", publicKey);
-      console.log("New wallet Created: ", publicKey);
+      setWallet({ walletAddress, privateKey });
 
+      sessionStorage.setItem("solanaWalletPublicAddress", walletAddress);
+      console.log("New wallet Created: ", walletAddress);
     } catch (error) {
       console.error("Error creating wallet", error);
     }
@@ -34,14 +33,14 @@ const CreateWallet: React.FC = () => {
       await navigator.clipboard.writeText(text);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    } catch (error) {
+    } catch (err) {
       console.error("Failed to copy text", err);
     }
   };
 
   return (
     <div className="text-center">
-      <Button variant="primary" onClick={createWallet} className="mb-3">
+      <Button variant="primary" onClick={createWallet} className="mb-4">
         Create New Wallet
       </Button>
 
@@ -49,19 +48,20 @@ const CreateWallet: React.FC = () => {
         <div className="mt-3">
           <Alert variant="success">
             <div className="mb-3">
-              <strong>Public Key:</strong> {" "}
-              <span className="text-break">{wallet.publicKey}</span>
+              <strong>Wallet Address:</strong>{" "}
+              <span className="text-break">{wallet.walletAddress}</span>
               <Button
                 variant="outline-secondary"
                 size="sm"
                 className="ms-2"
-                onClick={() => copyToClipBoard(wallet.publicKey)}
+                onClick={() => copyToClipBoard(wallet.walletAddress)}
               >
-                {copied ? "Copied!": "Copy"}
+                {copied ? "Copied!" : "Copy"}
               </Button>
             </div>
+
             <div>
-              <strong>Secret Key:</strong>{" "}
+              <strong>Private Key:</strong>{" "}
               <Button
                 variant="warning"
                 size="sm"
@@ -69,30 +69,35 @@ const CreateWallet: React.FC = () => {
                 onClick={() => setShowSecret(!showSecret)}
               >
                 {showSecret ? "Hide" : "Show"}
-
               </Button>
-              {showSecret && (
+              {showSecret && ( // Only renders if showSecret is true
                 <div className="mt-2">
                   <Alert variant="warning">
-                    Never share your secrete Key! Anyone with this key can access your funds.
-
+                    Never share your secrete Key! Anyone with this key can
+                    access your funds
                   </Alert>
-
+                  <textarea
+                    value={wallet.privateKey}
+                    readOnly
+                    className="form-control"
+                    rows={4}
+                  />
+                  <Button
+                    variant="outline-secondary"
+                    size="sm"
+                    className="mt-2"
+                    onClick={() => copyToClipBoard(wallet.privateKey)}
+                  >
+                    {copied ? "Copied!" : "Copy Secret Key"}
+                  </Button>
                 </div>
               )}
             </div>
-            <textarea
-              value={wallet.secretKey}
-              readOnly
-              aria-setsize={50}
-              className="form-control"
-            />
           </Alert>
         </div>
       )}
     </div>
   );
-}
-
+};
 
 export default CreateWallet;
